@@ -1,4 +1,3 @@
-from tokenize import Name
 from flask import g, abort
 from flask_restx import Namespace, Resource
 
