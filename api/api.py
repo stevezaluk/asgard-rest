@@ -5,6 +5,9 @@ from flask_restx import Api
 
 from asgard_sdk.models.config import Config
 
+from .namespaces.file import file_namespace
+from context import teardown_server
+
 class Rest(object):
     def __init__(self, config_path:str, debug=False):
         self.config_path = config_path
@@ -23,18 +26,17 @@ class Rest(object):
         config = Config(self.config_path)
         config.validate_structure()
         
-        values = config.values
-        for key in values:
-            value = values[key]
-            self._app.config[key] = value
+        self._app.config["config"] = config
 
         return config
 
     def _register_teardowns(self):
-        pass
+        self._app.teardown_appcontext(teardown_server)
 
     def _build_namespaces(self):
-        pass
+        self._api.add_namespace(file_namespace, path=self.endpoint_prefix)
     
     def run(self):
+        self._register_teardowns()
+        self._build_namespaces()
         self._app.run(debug=self.debug)
