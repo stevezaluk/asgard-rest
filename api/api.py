@@ -6,18 +6,18 @@ from flask_restx import Api
 from asgard_sdk.models.config import Config
 
 from .namespaces.file import file_namespace
-from context import teardown_server
+from .context import teardown_server
 
 class Rest(object):
     def __init__(self, config_path:str, debug=False):
         self.config_path = config_path
         self.debug = debug
 
-        self.endpoint_prefix = "/v1/api"
+        self.endpoint_prefix = "/api/v1"
 
-        self._config = self.load_config()
         self._app = Flask(__name__)
         self._api = Api(app=self._app)
+        self._config = self.load_config()
 
     def get_config(self):
         return self._config
