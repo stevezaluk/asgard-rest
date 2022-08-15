@@ -1,4 +1,4 @@
-from flask import g, abort
+from flask import g, abort, request
 from flask_restx import Namespace, Resource
 
 from asgard_sdk.format.print import print_info, print_error
@@ -70,5 +70,20 @@ class Index(Resource):
 @file_namespace.route("/search/<section_name>", methods=['GET'])
 class Search(Resource):
 
+    @get_server
     def get(self, section_name=None):
-        pass
+        args = request.args
+
+        if "q" in args:
+            file_name = args.get("q")
+            search = g.server.search(file_name=file_name, section_name=section_name, to_dict=True)
+
+            if search is None:
+                print_error("Failed to find section to search: ", section_name)
+
+            ret = {"search":search, "total_count":len(search)}
+            return ret
+        else:
+            print_error("Missing 'q' query string arg")
+            abort(400)
+
