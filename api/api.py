@@ -6,6 +6,7 @@ from flask_restx import Api
 from asgard_sdk.models.config import Config
 
 from .namespaces.file import file_namespace
+from .namespaces.analytics import analytics_namespace
 from .context import teardown_server
 
 class Rest(object):
@@ -13,7 +14,9 @@ class Rest(object):
         self.config_path = config_path
         self.debug = debug
 
-        self.endpoint_prefix = "/api/v1"
+        self.api_prefix = "/api/v1"
+        self.stats_prefix = "/api/analytics"
+        self.ui_prefix = "/dashboard"
 
         self._app = Flask(__name__)
         self._api = Api(app=self._app)
@@ -34,7 +37,8 @@ class Rest(object):
         self._app.teardown_appcontext(teardown_server)
 
     def _build_namespaces(self):
-        self._api.add_namespace(file_namespace, path=self.endpoint_prefix)
+        self._api.add_namespace(file_namespace, path=self.api_prefix)
+        self._api.add_namespace(analytics_namespace, path=self.stats_prefix)
     
     def run(self):
         self._register_teardowns()
