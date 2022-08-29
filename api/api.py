@@ -23,7 +23,7 @@ class Rest(object):
         self.ux_prefix = "/dashboard"
 
         self._app = Flask(__name__, template_folder=HTML_PATH)
-        self._api = Api(app=self._app)
+        self._api = Api(app=self._app, doc=self.ux_prefix + "/doc")
         self._config = self.load_config()
 
     def get_config(self):

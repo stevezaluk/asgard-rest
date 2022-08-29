@@ -17,7 +17,36 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
   <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
   <span class="w3-bar-item w3-right">Asgard BiFrost</span>
+  <button class="w3-button w3-teal w3-right">New Section</button>
 </div>
+
+<!-- <div class="new-section-popup" id="newSectionForm">
+  <form class="form-container">
+    <h1>New Section</h1> 
+
+    <label for="name"><b>Section Name: </b></label>
+    <input class="w3-input w3-border w3-light-grey" type="text">
+    
+    <select>
+      <option value="video">Video Files</option>
+      <option value="video-series">Video Series</option>
+      <option value="games">Games/ROMs</option>
+      <option value="documents">Documents</option>
+      <option value="generic-file">Generic Files</option> 
+    </select>
+
+    <label for="path"><b>Remote Path: </b></label>
+    <input class="w3-input w3-border w3-light-grey" type="text">
+
+    <label for="name"><b>MongoDB Collection: </b></label>
+    <input class="w3-input w3-border w3-light-grey" type="text">
+
+    <label for="name"><b>Plex Section: </b></label>
+    <input class="w3-input w3-border w3-light-grey" type="text">
+
+  </form>
+
+</div> -->
 
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
@@ -55,23 +84,28 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
 <!-- !PAGE CONTENT! -->
 <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+  <!-- <div class="w3-panel w3-red">
+    <h3>Danger</h3> Alert Popup
+  </div>  -->
+  
+  <header class="w3-container" style="padding-top:22px">
+    <h5><b><i class="fa fa-dashboard"></i> Sections</b></h5>
+  </header>
 
-<header class="w3-container" style="padding-top:22px">
-  <h5><b><i class="fa fa-dashboard"></i> Sections</b></h5>
-</header>
 
-<div class="w3-row-padding w3-margin-bottom">
-  {%for section in sections%}
-    <div class="w3-quarter">
-      <div class="w3-container w3-red w3-padding-16">
-        <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>{{section.section_size}}</h3>
+  <div class="w3-row-padding w3-margin-bottom">
+    {%for section in sections%}
+      <div class="w3-quarter">
+        <div class="w3-container w3-red w3-padding-16">
+          <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
+          <div class="w3-right">
+            <h3>{{section.section_size}} bytes</h3>
+          </div>
+          <div class="w3-clear"></div>
+          <h4><b>{{section.section_name}}</b></h4>
         </div>
-        <div class="w3-clear"></div>
-        <h4><b>{{section.section_name}}</b></h4>
       </div>
-    </div>
-  {%endfor%}
+    {%endfor%}
 
+  </div>
 </div>
