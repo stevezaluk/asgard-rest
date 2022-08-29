@@ -38,7 +38,17 @@ class File(Resource):
     
     @get_server
     def get(self, query, section_name=None):
-        file = g.server.get_file(query, section_name, to_dict=True)
+        section = None
+        
+        if section_name:
+            print("Fetching section")
+            section = g.server.get_section(section_name)
+            
+            if section is None:
+                print_error("Failed to find section: ", section_name)
+                abort(404)
+        
+        file = g.server.get_file(query, section, to_dict=True)
 
         if file is None: # file or section could not be found
             print_error("Failed to find file: ", query)
@@ -56,11 +66,16 @@ class Index(Resource):
 
     @get_server
     def get(self, section_name=None):
-        index = g.server.index(section_name, to_dict=True)
+        section = None
+        
+        if section_name:
+            section = g.server.get_section(section_name)
+            
+            if section is None:
+                print_error("Failed to find section: ", section_name)
+                abort(404)
 
-        if index is None:
-            print_error("Failed to find section to index: ", section_name)
-            abort(404)
+        index = g.server.index(section, to_dict=True)
 
         ret = {"index":index, "total_count":len(index)}
         
@@ -74,16 +89,21 @@ class Search(Resource):
     def get(self, section_name=None):
         args = request.args
 
-        if "q" in args:
-            file_name = args.get("q")
-            search = g.server.search(file_name=file_name, section_name=section_name, to_dict=True)
-
-            if search is None:
-                print_error("Failed to find section to search: ", section_name)
-
-            ret = {"search":search, "total_count":len(search)}
-            return ret
-        else:
+        if "q" not in args:
             print_error("Missing 'q' query string arg")
             abort(400)
 
+        section = None
+        
+        if section_name:
+            section = g.server.get_section(section_name)
+
+            if section is None:
+                print_error("Failed to find section: ", section_name)
+                abort(404)
+
+        file_name = args.get("q")
+        search = g.server.search(file_name=file_name, section=section, to_dict=True)
+
+        ret = {"search":search, "total_count":len(search)}
+        return ret
