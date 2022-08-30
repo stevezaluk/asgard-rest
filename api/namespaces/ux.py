@@ -28,7 +28,7 @@ class Files(Resource):
     
     @get_server
     def get(self):
-        index = g.server.index(section_name="Movies")
+        index = g.server.index(g.server.get_section("Movies"))
         return make_response(render_template("files.html", index=index))
 
 @ux_namespace.route("/upload", methods=["GET"])
