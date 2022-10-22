@@ -1,0 +1,3 @@
+[submodule "asgard-web-assets"]
+	path = asgard-web-assets
+	url = https://github.com/stevezaluk/asgard-web-assets.git
