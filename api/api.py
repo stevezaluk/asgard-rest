@@ -11,7 +11,7 @@ from .namespaces.ux import ux_namespace
 
 from .context import teardown_server
 
-HTML_PATH = "{}/web-assets/www".format(getcwd())
+HTML_PATH = "{}/asgard-web-assets".format(getcwd())
 
 class Rest(object):
     def __init__(self, config_path:str, debug=False):
@@ -20,7 +20,7 @@ class Rest(object):
 
         self.api_prefix = "/api/v1"
         self.stats_prefix = "/api/analytics"
-        self.ux_prefix = "/dashboard"
+        self.ux_prefix = "/ux"
 
         self._app = Flask(__name__, template_folder=HTML_PATH)
         self._api = Api(app=self._app, doc=self.ux_prefix + "/docs")

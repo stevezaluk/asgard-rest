@@ -8,12 +8,22 @@ from ..context import get_server
 
 ux_namespace = Namespace("ux", "Holds all UX/UI related endpoints used for rendering templates")
 
-@ux_namespace.route("/home", methods=["GET"])
+@ux_namespace.route("/dashboard", methods=["GET"])
 class Home(Resource):
     
-    # @get_server
+    @get_server
     def get(self):
-        return make_response(render_template("home.html"))
+        recently_uploaded = g.server.get_recently_uploaded()
+        sections = g.server.get_sections()
+        return make_response(render_template("dashboard.html", sections=sections, recently_uploaded=recently_uploaded))
+
+@ux_namespace.route("/view_file/<hash>", methods=["GET"])
+class ViewFile(Resource):
+
+    @get_server
+    def get(self, hash):
+        file = g.server.get_file(hash)
+        return make_response(render_template("pages/view_file.html", file=file))
 
 @ux_namespace.route("/sections", methods=["GET"])
 class Sections(Resource):
@@ -21,36 +31,12 @@ class Sections(Resource):
     @get_server
     def get(self):
         sections = g.server.get_sections() # to_dict=True
-        return make_response(render_template("sections.html", sections=sections))
+        return make_response(render_template("pages/sections.html", sections=sections))
 
-@ux_namespace.route("/files", methods=["GET"])
-class Files(Resource):
-    
+@ux_namespace.route("/view_section/<section_name>", methods=["GET"])
+class ViewSection(Resource):
     @get_server
-    def get(self):
-        index = g.server.index(g.server.get_section("Movies"))
-        return make_response(render_template("files.html", index=index))
+    def get(self, section_name):
+        section = g.server.get_section(section_name)
+        return make_response(render_template("pages/view_section.html", section=section))
 
-@ux_namespace.route("/upload", methods=["GET"])
-class Upload(Resource):
-    
-    def get(self):
-        return make_response(render_template("upload.html"))
-
-@ux_namespace.route("/search", methods=["GET"])
-class Search(Resource):
-    
-    def get(self):
-        return make_response(render_template("search.html"))
-
-@ux_namespace.route("/analytics", methods=["GET"])
-class Analytics(Resource):
-    
-    def get(self):
-        return make_response(render_template("analytics.html"))
-
-@ux_namespace.route("/docs", methods=["GET"])
-class Docs(Resource):
-    
-    def get(self):
-        return make_response(render_template("docs.html"))
