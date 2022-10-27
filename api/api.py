@@ -11,7 +11,8 @@ from .namespaces.ux import ux_namespace
 
 from .context import teardown_server
 
-HTML_PATH = "{}/asgard-web-assets".format(getcwd())
+TEMPLATES = "{}/asgard-web-assets/".format(getcwd())
+STATIC = "{}/asgard-web-assets/assets".format(getcwd())
 
 class Rest(object):
     def __init__(self, config_path:str, debug=False):
@@ -22,7 +23,7 @@ class Rest(object):
         self.stats_prefix = "/api/analytics"
         self.ux_prefix = "/ux"
 
-        self._app = Flask(__name__, template_folder=HTML_PATH)
+        self._app = Flask(__name__, template_folder=TEMPLATES, static_folder=STATIC)
         self._api = Api(app=self._app, doc=self.ux_prefix + "/docs")
         self._config = self.load_config()
 
